@@ -33,7 +33,7 @@ Add dependencies in package.json, then update to bring node modules
 Open up a separate tab in your console and stream all logs for a specific Function    
 `sls logs -f hello -t 1m`
 
-* Removes all Functions, Events and Resources from your AWS account  
+* Remove all Functions, Events and Resources from the AWS account  
 `sls remove`
 
 ### CloudFormation Commands
