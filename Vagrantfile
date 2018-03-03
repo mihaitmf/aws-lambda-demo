@@ -30,7 +30,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         serverless.vm.hostname = "aws-lambda-workshop"
 
         serverless.vm.synced_folder ".", "/vagrant", disabled: true
-        serverless.vm.synced_folder ".", "/var/aws-lambda-workshop", create: true
+        serverless.vm.synced_folder ".", "/var/aws-lambda-demo", create: true
 
         # serverless.vm.provision "docker"
 
