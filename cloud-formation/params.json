@@ -1,0 +1,26 @@
+[
+  {
+    "ParameterKey": "DesiredAZ",
+    "ParameterValue": "eu-west-3a"
+  },
+  {
+    "ParameterKey": "DBDesiredAZ1",
+    "ParameterValue": "eu-west-3b"
+  },
+  {
+    "ParameterKey": "DBDesiredAZ2",
+    "ParameterValue": "eu-west-3c"
+  },
+  {
+    "ParameterKey": "DBName",
+    "ParameterValue": "mydatabase"
+  },
+  {
+    "ParameterKey": "DBUser",
+    "ParameterValue": "mihait"
+  },
+  {
+    "ParameterKey": "DBPassword",
+    "ParameterValue": "test123#"
+  }
+]

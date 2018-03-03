@@ -1,0 +1,183 @@
+{
+  "AWSTemplateFormatVersion" : "2010-09-09",
+  "Parameters": {
+    "DesiredAZ": {
+      "Description": "Availability Zones",
+      "Type": "String"
+    },
+    "DBDesiredAZ1": {
+      "Description": "Availability Zones for DB server",
+      "Type": "String"
+    },
+    "DBDesiredAZ2": {
+      "Description": "Availability Zones for DB server",
+      "Type": "String"
+    },
+    "DBName": {
+      "Description": "Database name",
+      "Type": "String"
+    },
+    "DBUser": {
+      "Description": "Database user",
+      "Type": "String"
+    },
+    "DBPassword": {
+      "Description": "Database password",
+      "Type": "String"
+    }
+  },
+  "Outputs": {
+    "VPCID": {
+      "Description": "VPC ID",
+      "Value": { "Ref": "myVPC" },
+      "Export": { "Name": { "Fn::Sub": "${AWS::StackName}-VPCID" } }
+    },
+    "SubnetID": {
+      "Description": "Subnet ID",
+      "Value": { "Ref": "mySubnet" },
+      "Export": { "Name": { "Fn::Sub": "${AWS::StackName}-SubnetId" } }
+    },
+    "SecurityGroupID": {
+      "Description": "SecurityGroup ID",
+      "Value": { "Ref": "mySecurityGroup" },
+      "Export": { "Name": { "Fn::Sub": "${AWS::StackName}-SecurityGroupId" } }
+    },
+    "RouteTableID": {
+      "Description": "RouteTable ID",
+      "Value": { "Ref": "myRouteTable" },
+      "Export": { "Name": { "Fn::Sub": "${AWS::StackName}-RouteTableId" } }
+    },
+    "DBSubnetID1": {
+      "Description": "DB Subnet-1 ID",
+      "Value": { "Ref": "myDBSubnet1" },
+      "Export": { "Name": { "Fn::Sub": "${AWS::StackName}-DBSubnetId-1" } }
+    },
+    "DBSubnetID2": {
+      "Description": "DB Subnet-2 ID",
+      "Value": { "Ref": "myDBSubnet2" },
+      "Export": { "Name": { "Fn::Sub": "${AWS::StackName}-DBSubnetId-2" } }
+    },
+    "DBHost": {
+      "Description": "DB Host",
+      "Value": { "Fn::GetAtt" : [ "myDB", "Endpoint.Address" ] },
+      "Export": { "Name": { "Fn::Sub": "${AWS::StackName}-DBHost" } }
+    },
+    "DBPort": {
+      "Description": "DB Port",
+      "Value": { "Fn::GetAtt" : [ "myDB", "Endpoint.Port" ] },
+      "Export": { "Name": { "Fn::Sub": "${AWS::StackName}-DBPort" } }
+    }
+  },
+  "Resources" : {
+    "myVPC" : {
+      "Type" : "AWS::EC2::VPC",
+      "Properties" : {
+        "CidrBlock" : "10.69.0.0/16",
+        "EnableDnsSupport" : "true",
+        "EnableDnsHostnames" : "true",
+        "Tags" : [ {"Key" : "Name", "Value" : "mihait-vpc"} ]
+      }
+    },
+    "mySubnet" : {
+      "Type" : "AWS::EC2::Subnet",
+      "Properties" : {
+        "VpcId" : { "Ref" : "myVPC" },
+        "CidrBlock" : "10.69.1.0/24",
+        "AvailabilityZone" : {"Ref": "DesiredAZ"},
+        "Tags" : [ {"Key" : "Name", "Value" : "mihait-subnet-1"} ]
+      }
+    },
+    "mySecurityGroup" : {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "Lambda Security Group",
+        "VpcId": { "Ref": "myVPC" }
+      }
+    },
+    "myRouteTable" : {
+      "Type" : "AWS::EC2::RouteTable",
+      "Properties" : {
+        "VpcId" : { "Ref" : "myVPC" }
+      }
+    },
+    "mySubnetRouteTableAssociation" : {
+      "Type" : "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties" : {
+        "SubnetId" : { "Ref" : "mySubnet" },
+        "RouteTableId" : { "Ref" : "myRouteTable" }
+      }
+    },
+    "S3Endpoint" : {
+      "Type" : "AWS::EC2::VPCEndpoint",
+      "Properties" : {
+        "PolicyDocument" : {
+          "Version":"2012-10-17",
+          "Statement":[{
+            "Effect":"Allow",
+            "Principal": "*",
+            "Action":["*"],
+            "Resource":["*"]
+          }]
+        },
+        "RouteTableIds" : [ {"Ref" : "myRouteTable"} ],
+        "ServiceName" : { "Fn::Sub": "com.amazonaws.${AWS::Region}.s3" },
+        "VpcId" : {"Ref" : "myVPC"}
+      }
+    },
+    "myDBSubnet1" : {
+      "Type" : "AWS::EC2::Subnet",
+      "Properties" : {
+        "VpcId" : { "Ref" : "myVPC" },
+        "CidrBlock" : "10.69.11.0/24",
+        "AvailabilityZone" : {"Ref": "DBDesiredAZ1"},
+        "Tags" : [ { "Key" : "foo", "Value" : "bar" }, {"Key" : "Name", "Value" : "mihait-subnet-db1"} ]
+      }
+    },
+    "myDBSubnet2" : {
+      "Type" : "AWS::EC2::Subnet",
+      "Properties" : {
+        "VpcId" : { "Ref" : "myVPC" },
+        "CidrBlock" : "10.69.12.0/24",
+        "AvailabilityZone" : {"Ref": "DBDesiredAZ2"},
+        "Tags" : [ { "Key" : "foo", "Value" : "bar" }, {"Key" : "Name", "Value" : "mihait-subnet-db2"} ]
+      }
+    },
+    "myDBSubnetGroup" : {
+      "Type" : "AWS::RDS::DBSubnetGroup",
+      "Properties" : {
+        "DBSubnetGroupDescription" : "DB Subnet Group Description",
+        "SubnetIds" : [ { "Ref": "myDBSubnet1" }, { "Ref": "myDBSubnet2" } ],
+        "Tags" : [ {"Key" : "Name", "Value" : "My Subnet Group"} ]
+      }
+    },
+    "myDBSecurityGroup" : {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties" : {
+        "GroupDescription": "DB Security Group Description",
+        "VpcId": { "Ref": "myVPC" },
+        "SecurityGroupIngress": [{
+          "IpProtocol": "tcp",
+          "FromPort": "3306",
+          "ToPort": "3306",
+          "CidrIp": "10.69.0.0/16"
+        }]
+      }
+    },
+    "myDB" : {
+      "Type" : "AWS::RDS::DBInstance",
+      "Properties" : {
+        "DBName" : { "Ref" : "DBName" },
+        "AllocatedStorage" : "10",
+        "DBInstanceClass" : "db.t2.small",
+        "Engine" : "MySQL",
+        "EngineVersion" : "5.5",
+        "MasterUsername" : { "Ref" : "DBUser" },
+        "MasterUserPassword" : { "Ref" : "DBPassword" },
+        "Tags" : [ { "Key" : "Name", "Value" : "MihaiT SQL Database" } ],
+        "DBSubnetGroupName": { "Ref": "myDBSubnetGroup" },
+        "VPCSecurityGroups": [ {"Ref": "myDBSecurityGroup" } ]
+      },
+      "DeletionPolicy" : "Snapshot"
+    }
+  }
+}

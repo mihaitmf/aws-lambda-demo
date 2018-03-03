@@ -33,4 +33,18 @@ Add dependencies in package.json, then update to bring node modules
 Open up a separate tab in your console and stream all logs for a specific Function    
 `sls logs -f hello -t 1m`
 
+* Removes all Functions, Events and Resources from your AWS account  
+`sls remove`
+
 ### CloudFormation Commands
+* Change directory  
+`cd cloud-formation`
+
+* Create AWS stack using AWS CLI  
+`aws --region eu-west-3 cloudformation create-stack --stack-name mihait-stack --template-body "$(cat services.json)"`
+
+* Update AWS stack using AWS CLI  
+`aws --region eu-west-3 cloudformation update-stack --stack-name mihait-stack --template-body "$(cat services.json)" --parameters "$(cat params.json)"`
+
+* Delete AWS stack using AWS CLI  
+`aws --region eu-west-3 cloudformation delete-stack --stack-name mihait-stack`
