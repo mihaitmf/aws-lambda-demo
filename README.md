@@ -1,16 +1,21 @@
 # aws-lambda-demo
 Demo project using [serverless framework](https://github.com/serverless/serverless) and CloudFormation to deploy AWS Lambda services.
 
+Serverless is used to keep the configuration of stateless services, lambda functions.
+
+CloudFormation is used to keep the configuration of network infrastructure and data services, like VPCs, Subnets, Security Groups, RDS (ex: mysql), Dynamo DB, Elastic Search. 
+
 ### Quick Start
 * Create the virtual machine with nodejs, npm and serverless installed  
-`vagrant up` 
+`vagrant up`  
+Log into the vagrant machine  
+`vagrant ssh`
 
 * Create a new Serverless Service/Project  
 Create a Serverless template yml file and a default nodejs lambda function  
-`sls create -t aws-nodejs -p my-lambda-service`  
-
-* Change directory  
-`cd my-lambda-project`  
+`sls create -t aws-nodejs -p my-lambda-service`    
+Change directory  
+`cd my-lambda-project`
 
 * For projects requiring node modules, create package.json  
 `npm init`  
