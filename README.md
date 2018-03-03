@@ -9,7 +9,7 @@ CloudFormation is used to keep the configuration of network infrastructure and d
 * Create the virtual machine with nodejs, npm and serverless installed  
 `vagrant up`  
 Log into the vagrant machine  
-`vagrant ssh`
+`vagrant ssh`  
 `cd /var/aws-lambda-demo`
 
 * Create a new Serverless Service/Project  
