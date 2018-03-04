@@ -63,7 +63,7 @@ Add dependencies in package.json, then update to bring node modules
 * Deploy the service that will create AWS resources and nodejs lambda functions  
 `sls deploy`
 
-* Invoke the "hello" lambda function in AWS  
+* Invoke a lambda function in AWS  
 `sls invoke -f hello`
 
 * Invoke a lambda function locally, for testing purposes  
@@ -77,9 +77,6 @@ Open up a separate tab in your console and stream all logs for a specific Functi
 `sls remove`
 
 ### CloudFormation Commands
-* Change directory  
-`cd cloud-formation`
-
 * Create AWS stack using AWS CLI  
 `aws --region eu-west-1 cloudformation create-stack --stack-name mihait-stack --template-body "$(cat services.json)" --parameters "$(cat params.json)"`
 
