@@ -30,8 +30,11 @@ Log into the vagrant machine
 * Invoke the "fwrite" lambda function in AWS  
 `sls invoke -f fwrite`
 
-* Invoke the "fwrite" lambda function in AWS  
+* Invoke the "fread" lambda function in AWS  
 `sls invoke -f fread`
+
+* Invoke the "fdelete" lambda function in AWS  
+`sls invoke -f fdelete`
 
 * Invoke the "dbwrite" lambda function in AWS  
 `sls invoke -f dbwrite`
