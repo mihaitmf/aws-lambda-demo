@@ -1,15 +1,15 @@
 [
   {
     "ParameterKey": "DesiredAZ",
-    "ParameterValue": "eu-west-3a"
+    "ParameterValue": "eu-west-1a"
   },
   {
     "ParameterKey": "DBDesiredAZ1",
-    "ParameterValue": "eu-west-3b"
+    "ParameterValue": "eu-west-1b"
   },
   {
     "ParameterKey": "DBDesiredAZ2",
-    "ParameterValue": "eu-west-3c"
+    "ParameterValue": "eu-west-1c"
   },
   {
     "ParameterKey": "DBName",

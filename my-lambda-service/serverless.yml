@@ -26,7 +26,7 @@ provider:
 
 # you can overwrite defaults here
 #  stage: dev
-  region: eu-west-3
+  region: eu-west-1
 
   iamRoleStatements:
      - Effect: "Allow"
