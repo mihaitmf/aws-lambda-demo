@@ -10,8 +10,39 @@ CloudFormation is used to keep the configuration of network infrastructure and d
 `vagrant up`  
 Log into the vagrant machine  
 `vagrant ssh`  
-`cd /var/aws-lambda-demo`
+`cd /var/aws-lambda-demo/my-lambda-project`
 
+* Update npm dependencies  
+`npm update`
+
+* Set up Serverless AWS credentials  
+`sls config credentials -p aws -k my_aws_access_key -s my_aws_secret`
+
+* Create AWS CloudFormation stack  
+`cd ../cloud-formation && aws --region eu-west-1 cloudformation create-stack --stack-name mihait-stack --template-body "$(cat services.json)" --parameters "$(cat params.json)"`
+
+* Deploy Serverless lambda functions  
+`sls deploy`
+
+* Invoke the "hello" lambda function in AWS  
+`sls invoke -f hello`
+
+* Invoke the "fwrite" lambda function in AWS  
+`sls invoke -f fwrite`
+
+* Invoke the "fwrite" lambda function in AWS  
+`sls invoke -f fread`
+
+* Invoke the "dbwrite" lambda function in AWS  
+`sls invoke -f dbwrite`
+
+* Invoke the "dbwrite" lambda function over HTTP using the URL endpoint provided in the response of the `sls deploy` command   
+`curl http://AWS-URL/files/dbwrite`
+
+* Clean up when done  
+`sls remove && cd ../cloud-formation && aws --region eu-west-1 cloudformation delete-stack --stack-name mihait-stack`
+
+### Serverless commands
 * Create a new Serverless Service/Project  
 Create a Serverless template yml file and a default nodejs lambda function  
 `sls create -t aws-nodejs -p my-lambda-service`    
@@ -47,10 +78,10 @@ Open up a separate tab in your console and stream all logs for a specific Functi
 `cd cloud-formation`
 
 * Create AWS stack using AWS CLI  
-`aws --region eu-west-3 cloudformation create-stack --stack-name mihait-stack --template-body "$(cat services.json)"`
+`aws --region eu-west-1 cloudformation create-stack --stack-name mihait-stack --template-body "$(cat services.json)" --parameters "$(cat params.json)"`
 
 * Update AWS stack using AWS CLI  
-`aws --region eu-west-3 cloudformation update-stack --stack-name mihait-stack --template-body "$(cat services.json)" --parameters "$(cat params.json)"`
+`aws --region eu-west-1 cloudformation update-stack --stack-name mihait-stack --template-body "$(cat services.json)" --parameters "$(cat params.json)"`
 
 * Delete AWS stack using AWS CLI  
-`aws --region eu-west-3 cloudformation delete-stack --stack-name mihait-stack`
+`aws --region eu-west-1 cloudformation delete-stack --stack-name mihait-stack`
