@@ -2,8 +2,7 @@
 
 const AWS = require('aws-sdk');
 const s3 = new AWS.S3();
-const s3BucketName = "bucket-paris";
-// const s3BucketName = "lambdatrainingpayu";
+const s3BucketName = "lambdatrainingpayu";
 const fileName = "the-great-file-of-cocos";
 
 module.exports.writeFile = (event, context, callback) => {
@@ -45,23 +44,30 @@ module.exports.readFile = (event, context, callback) => {
     };
 
     s3.getObject(params, function(err, data) {
+        var responseError;
+        var fileContent;
         if (err) {
             console.log("An error occurred: " + err, err.stack);
+
+            responseError = err;
         } else {
+            fileContent = data.Body.toString();
             console.log("Successfully retrieved file \"" + fileName + "\" from the \"" + s3BucketName + "\" S3 bucket.");
-            console.log("File content:\n" + data.Body);
+            console.log("File content:\n" + fileContent);
         }
+        const response = {
+            statusCode: 200,
+            body: JSON.stringify({
+                message: "The function to read a file from S3 has been invoked!",
+                fileContent: fileContent,
+                error: responseError,
+                input: event,
+            }),
+        };
+
+        // call "callback" here for synchronous response
+        callback(null, response);
     });
-
-    const response = {
-        statusCode: 200,
-        body: JSON.stringify({
-            message: "The function to read a file from S3 has been invoked!",
-            input: event,
-        }),
-    };
-
-    callback(null, response);
 };
 
 module.exports.deleteFile = (event, context, callback) => {
@@ -119,6 +125,7 @@ module.exports.connectDb = (event, context, callback) => {
             }),
         };
 
+        // call "callback" here for synchronous response
         callback(null, response);
     });
 
